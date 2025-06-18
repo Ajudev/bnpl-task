@@ -372,7 +372,7 @@ const CreatePlan = () => {
             >
               <div style={{ fontSize: "14px", color: "#004085" }}>
                 <strong>Note:</strong> The customer will receive an email
-                notification about this payment plan once created.
+                notification once the payment installments are due.
               </div>
             </div>
           )}
