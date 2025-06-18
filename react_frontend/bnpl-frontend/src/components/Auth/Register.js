@@ -71,6 +71,11 @@ const Register = () => {
       return false;
     }
 
+    if (formData.phone.length > 15) {
+      setError("Phone number should not be longer than 15 characters");
+      return false;
+    }
+
     return true;
   };
 

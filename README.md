@@ -41,7 +41,9 @@ A simple Buy Now, Pay Later (BNPL) dashboard built with Django REST Framework ba
 ### Prerequisites
 
 - Python 3.10.4
+- Pip 22.0.4
 - Node.js 22.13.1
+- Npm 10.9.2
 - Redis (for Celery)
 
 ### Backend Setup
@@ -76,14 +78,19 @@ EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 4. **Database Setup**
 
 ```bash
+cd bnpl
+# To apply migrations
 python manage.py makemigrations
 python manage.py migrate
+
+# To create django admin superuser
 python manage.py createsuperuser
 ```
 
 5. **Start Backend Services**
 
 ```bash
+cd bnpl
 # Terminal 1: Django server
 python manage.py runserver
 
@@ -113,6 +120,7 @@ REACT_APP_API_URL=http://localhost:8000
 3. **Start Frontend**
 
 ```bash
+cd react_frontend/bnpl-frontend
 npm start
 ```
 

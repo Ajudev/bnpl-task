@@ -166,20 +166,20 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'mark-overdue-installments': {
         'task': 'payments.tasks.mark_overdue_installments',
-        'schedule': crontab(hour=6, minute=39),  # Daily at midnight
+        'schedule': crontab(hour=0, minute=0),  # Daily at midnight
     },
     'send-payment-reminders': {
         'task': 'payments.tasks.send_payment_reminders_batch',
-        'schedule': crontab(hour=6, minute=40),  # Daily at 9 AM
+        'schedule': crontab(hour=9, minute=0),  # Daily at 9 AM
     },
 }
 
 # Email config
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST_SERVER")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@bnpl.test")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.getenv("EMAIL_HOST_PORT")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "no-reply@bnpl.test")

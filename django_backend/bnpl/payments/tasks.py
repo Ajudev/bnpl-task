@@ -1,11 +1,14 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.db.models import Q
+from datetime import timedelta
 from .models import Installment
 
 @shared_task
 def send_payment_reminders_batch():
-    installments = Installment.objects.all()
+    due_date_filter_date = timezone.now().date() + timedelta(days=7)
+    installments = Installment.objects.filter(Q(status="pending") | Q(status="overdue"), due_date__lte=due_date_filter_date)
     for installment in installments:
         if installment.status == "pending":
             subject = f"Payment Reminder - Installment Due"
@@ -19,8 +22,7 @@ def send_payment_reminders_batch():
             
             Thank you!
             """
-            send_email = True
-        elif installment.status == "overdue":
+        else:
             subject = f"Payment Reminder - Installment Overdue"
             message = f"""
             Dear Customer,
@@ -32,18 +34,15 @@ def send_payment_reminders_batch():
             
             Thank you!
             """
-            send_email = True
-        else:
-            send_email = False
         
-        if send_email:
-            # In production, you would send to the actual customer email
-            send_mail(
-                subject=subject,
-                message=message,
-                recipient_list=[installment.payment_plan.customer_email],
-                fail_silently=True,
-            )
+        # In production, this would send to the actual customer email
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=None,
+            recipient_list=[installment.payment_plan.customer_email],
+            fail_silently=True,
+        )
         
         print(f"Reminder sent for installment {installment.id}")
     return "Task has been successfully executed"
